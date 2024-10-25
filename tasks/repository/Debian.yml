@@ -1,0 +1,25 @@
+# code: language=ansible
+---
+- name: Install repository dependency packages
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+## @see https://docs.docker.com/engine/install/debian/#install-using-the-repository
+- name: Create GPG key directory
+  ansible.builtin.file:
+    path: "{{ docker_apt_key_dest | dirname }}"
+    state: directory
+    mode: "0755"
+- name: Download GPG key
+  ansible.builtin.get_url:
+    url: "{{ docker_apt_key_url }}"
+    dest: "{{ docker_apt_key_dest }}"
+    mode: "0644"
+- name: Add docker repository
+  ansible.builtin.apt_repository:
+    filename: docker
+    repo: deb [signed-by={{ docker_apt_key_dest }}] https://download.docker.com/linux/debian {{ ansible_facts.distribution_release }} stable
+    state: present

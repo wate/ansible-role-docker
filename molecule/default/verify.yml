@@ -1,0 +1,43 @@
+# code: language=ansible
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    ## テストの前処理
+    - name: Gather package facts
+      ansible.builtin.package_facts:
+    - name: Gather service facts
+      ansible.builtin.service_facts:
+    ## パッケージのテスト
+    - name: Assert docker package
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.packages['docker-ce'] is defined
+          - ansible_facts.packages['docker-ce-cli'] is defined
+          - ansible_facts.packages['containerd.io'] is defined
+          - ansible_facts.packages['docker-buildx-plugin'] is defined
+          - ansible_facts.packages['docker-compose-plugin'] is defined
+    ## 設定ファイルのテスト
+    - name: Ckeck docker setting
+      ansible.builtin.stat:
+        path: /etc/docker/daemon.json
+      register: docker_setting_result
+    - name: Assert docker setting
+      ansible.builtin.assert:
+        that:
+          - docker_setting_result.stat.exists
+    ## サービスのテスト
+    - name: Assert docker service
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services['docker.service'] is defined
+          - ansible_facts.services['docker.service']['state'] == 'running'
+          - ansible_facts.services['docker.service']['status'] == 'enabled'
+    - name: Assert containerd service
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services['containerd.service'] is defined
+          - ansible_facts.services['containerd.service']['state'] == 'running'
+          - ansible_facts.services['containerd.service']['status'] == 'enabled'

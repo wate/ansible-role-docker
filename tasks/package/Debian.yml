@@ -1,0 +1,5 @@
+# code: language=ansible
+---
+- name: Install docker packages
+  ansible.builtin.apt:
+    name: "{{ docker_packages }}"

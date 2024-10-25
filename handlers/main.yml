@@ -1,0 +1,18 @@
+# code: language=ansible
+---
+- name: Restart docker
+  ansible.builtin.systemd_service:
+    state: restarted
+    name: docker
+- name: Reload docker
+  ansible.builtin.systemd_service:
+    state: reloaded
+    name: docker
+- name: Restart containerd
+  ansible.builtin.systemd_service:
+    state: restarted
+    name: containerd
+- name: Reload containerd
+  ansible.builtin.systemd_service:
+    state: reloaded
+    name: containerd

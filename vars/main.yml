@@ -1,0 +1,6 @@
+---
+docker_apt_key_url: https://download.docker.com/linux/debian/gpg
+docker_apt_key_dest: /etc/apt/keyrings/docker.asc
+
+docker_user: docker
+docker_group: docker
