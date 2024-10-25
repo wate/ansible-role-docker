@@ -34,10 +34,6 @@ Dockerの設定
 
 #### `docker_apt_key_dest`
 
-#### `docker_user`
-
-#### `docker_group`
-
 Example Playbook
 --------------
 
