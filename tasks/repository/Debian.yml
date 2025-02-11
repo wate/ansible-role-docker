@@ -3,6 +3,8 @@
 - name: Install repository dependency packages
   ansible.builtin.apt:
     name:
+      - python3-apt
+      - python3-debian
       - apt-transport-https
       - ca-certificates
       - curl
@@ -19,7 +21,16 @@
     dest: "{{ docker_apt_key_dest }}"
     mode: "0644"
 - name: Add docker repository
-  ansible.builtin.apt_repository:
-    filename: docker
-    repo: deb [signed-by={{ docker_apt_key_dest }}] https://download.docker.com/linux/debian {{ ansible_facts.distribution_release }} stable
+  ansible.builtin.deb822_repository:
+    name: docker
+    uris: https://download.docker.com/linux/debian
+    suites: "{{ ansible_facts.distribution_release }}"
+    components: stable
+    signed_by: "{{ docker_apt_key_dest }}"
+    enabled: true
     state: present
+  register: apt_repository_result
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+  when: apt_repository_result is changed

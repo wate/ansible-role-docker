@@ -1,8 +1,13 @@
 # code: language=ansible
 ---
+- name: Create setting file directory
+  ansible.builtin.file:
+    path: /etc/docker
+    state: directory
+    mode: "0755"
 - name: Create/update setting file
   ansible.builtin.template:
     src: daemon.json.j2
-    dest: /erc/docker/daemon.json
+    dest: /etc/docker/daemon.json
     mode: "0644"
   notify: Restart docker
