@@ -20,7 +20,7 @@
           - ansible_facts.packages['docker-buildx-plugin'] is defined
           - ansible_facts.packages['docker-compose-plugin'] is defined
     ## 設定ファイルのテスト
-    - name: Ckeck docker setting
+    - name: Check docker setting
       ansible.builtin.stat:
         path: /etc/docker/daemon.json
       register: docker_setting_result
