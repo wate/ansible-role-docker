@@ -11,3 +11,22 @@
     name: containerd
     state: started
     enabled: true
+- name: Enable ufw and install ufw-docker
+  when: docker_install_ufw_docker
+  block:
+    - name: Ensure ufw is active and enabled on system startup
+      ansible.builtin.systemd_service:
+        name: ufw
+        state: started
+        enabled: true
+    - name: Check installed ufw-docker
+      ansible.builtin.lineinfile:
+        path: /etc/ufw/after.rules
+        line: "# BEGIN UFW AND DOCKER"
+      check_mode: true
+      register: check_result
+    - name: Install ufw-docker
+      ansible.builtin.command:
+        cmd: /usr/local/bin/ufw-docker install
+      when: check_result is changed
+      notify: Restart ufw

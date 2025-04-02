@@ -3,3 +3,9 @@
 - name: Install docker packages
   ansible.builtin.apt:
     name: "{{ docker_packages }}"
+- name: Install ufw-docker
+  ansible.builtin.get_url:
+    url: https://github.com/chaifeng/ufw-docker/raw/master/ufw-docker
+    dest: /usr/local/bin/ufw-docker
+    mode: "0755"
+  when: docker_install_ufw_docker

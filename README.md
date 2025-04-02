@@ -26,6 +26,10 @@ Role Variables
 
 Dockerの設定
 
+#### `docker_install_ufw_docker`
+
+ufw-dockerのインストールおよび適用を行うか否か
+
 ### [vars/main.yml](vars/main.yml)
 
 設定値については[vars/main.yml](vars/main.yml)を参照してください。

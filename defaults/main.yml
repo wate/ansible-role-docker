@@ -13,3 +13,8 @@ docker_packages:
 ## Dockerの設定
 ## -----------------
 docker_cfg: {}
+
+## -----------------
+## ufw-dockerのインストールおよび適用を行うか否か
+## -----------------
+docker_install_ufw_docker: false

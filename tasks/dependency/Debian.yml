@@ -1,0 +1,6 @@
+# code: language=ansible
+---
+- name: Install ufw package
+  ansible.builtin.apt:
+    name: ufw
+  when: docker_install_ufw_docker

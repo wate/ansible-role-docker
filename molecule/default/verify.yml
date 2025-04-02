@@ -10,6 +10,12 @@
       ansible.builtin.package_facts:
     - name: Gather service facts
       ansible.builtin.service_facts:
+    - name: Gather group facts
+      ansible.builtin.getent:
+        database: group
+    - name: Set assert variables
+      ansible.builtin.set_fact:
+        registered_groups: "{{ ansible_facts.getent_group }}"
     ## パッケージのテスト
     - name: Assert docker package
       ansible.builtin.assert:
@@ -19,6 +25,11 @@
           - ansible_facts.packages['containerd.io'] is defined
           - ansible_facts.packages['docker-buildx-plugin'] is defined
           - ansible_facts.packages['docker-compose-plugin'] is defined
+    ## グループのテスト
+    - name: Assert docker group
+      ansible.builtin.assert:
+        that:
+          - registered_groups['docker'] is defined
     ## 設定ファイルのテスト
     - name: Check docker setting
       ansible.builtin.stat:
