@@ -1,6 +1,13 @@
 # code: language=ansible
 ---
-- name: Install ufw package
-  ansible.builtin.apt:
-    name: ufw
+- name: Install ufw package and locale setting
   when: docker_install_ufw_docker
+  block:
+    - name: Install ufw package
+      ansible.builtin.apt:
+        name: ufw
+    ## @see https://github.com/chaifeng/ufw-docker/issues/129
+    - name: Ensure en_US.UTF-8 locale exists
+      community.general.locale_gen:
+        name: en_US.UTF-8
+        state: present
