@@ -16,3 +16,7 @@
   ansible.builtin.systemd_service:
     state: reloaded
     name: containerd
+- name: Restart ufw
+  ansible.builtin.systemd_service:
+    state: restarted
+    name: ufw

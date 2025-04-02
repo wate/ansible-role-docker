@@ -1,0 +1,6 @@
+behaviour
+buildx
+containerd
+cpus
+endswith
+envrc

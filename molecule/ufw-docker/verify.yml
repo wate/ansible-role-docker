@@ -39,6 +39,35 @@
       ansible.builtin.assert:
         that:
           - docker_setting_result.stat.exists
+    ## ufw-dockerのテスト
+    - name: Test ufw-docker
+      block:
+        - name: Check installed ufw-docker
+          ansible.builtin.stat:
+            path: /usr/local/bin/ufw-docker
+          register: ufw_docker_result
+        - name: Assert ufw-docker
+          ansible.builtin.assert:
+            that:
+              - ufw_docker_result.stat.exists
+              - ufw_docker_result.stat.executable
+        - name: Check ufw-docker apply setting(1)
+          ansible.builtin.lineinfile:
+            path: /etc/ufw/after.rules
+            line: "# BEGIN UFW AND DOCKER"
+          register: begin_ufw_docker_setting_line
+          check_mode: true
+        - name: Check ufw-docker apply setting(w)
+          ansible.builtin.lineinfile:
+            path: /etc/ufw/after.rules
+            line: "# END UFW AND DOCKER"
+          register: end_ufw_docker_setting_line
+          check_mode: true
+        - name: Assert applied ufw-docker
+          ansible.builtin.assert:
+            that:
+              - begin_ufw_docker_setting_line is not changed
+              - end_ufw_docker_setting_line is not changed
     ## サービスのテスト
     - name: Assert docker service
       ansible.builtin.assert:
